@@ -9,7 +9,7 @@ import (
 	"github.com/beevik/ntp"
 )
 
-func main() {
+func Now() {
 	timeResult, err := ntp.Time("time.google.com")
 	if err != nil {
 		log.Fatalf("Ошибка в получении времени: %v\n", err)
