@@ -1,7 +1,7 @@
 package main
 
-import "ru/zakat/l2/anagram"
+import "ru/zakat/l2/orchan"
 
 func main() {
-	anagram.Run()
+	orchan.RunOrChannel()
 }
