@@ -10,6 +10,7 @@ import (
 	"strings"
 )
 
+// Опции утилиты
 type GrepOptions struct {
 	After      int
 	Before     int
@@ -21,6 +22,7 @@ type GrepOptions struct {
 	LineNum    bool
 }
 
+// Функция для чтения файла
 func readLines(filename string) []string {
 	file, err := os.Open(filename)
 	if err != nil {
@@ -37,6 +39,7 @@ func readLines(filename string) []string {
 	return lines
 }
 
+// Фукнция для проверки строки на вхождение
 func matchLine(pattern, line string, opt *GrepOptions) bool {
 	if opt.IgnoreCase {
 		pattern = strings.ToLower(pattern)
@@ -49,17 +52,9 @@ func matchLine(pattern, line string, opt *GrepOptions) bool {
 
 	matched, err := regexp.MatchString(pattern, line)
 	if err != nil {
-		log.Fatalf("Failed to match line.", err)
+		log.Fatal("Failed to match line.", err)
 	}
 	return matched
-}
-
-func printLines(lines []string, start, end int) {
-	for i := start; i < end && i < len(lines); i++ {
-		if i >= 0 {
-			fmt.Println(lines[i])
-		}
-	}
 }
 
 func main() {
@@ -80,6 +75,7 @@ func main() {
 	pattern, filename := args[0], args[1]
 
 	lines := readLines(filename)
+	// Слайс индексов подходящих строк
 	var result []int
 	var count int
 	for i, line := range lines {
@@ -105,6 +101,7 @@ func main() {
 		opt.Before = opt.Context
 	}
 
+	// Слайс индексов строк, которые необходимо напечатать
 	var printResult []int
 	for _, idx := range result {
 		start := idx - opt.Before
