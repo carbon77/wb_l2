@@ -1,18 +1,31 @@
 package router
 
 import (
-	"fmt"
+	"encoding/json"
+	"io"
+	"log"
 	"net/http"
+	"ru/zakat/server/events"
 )
 
 func createEvent(w http.ResponseWriter, req *http.Request) {
 	switch req.Method {
-	case "GET":
-		name := "User"
-		if req.URL.Query().Has("name") {
-			name = req.URL.Query().Get("name")
+	case "POST":
+		b, err := io.ReadAll(req.Body)
+		if err != nil {
+			w.WriteHeader(http.StatusBadRequest)
+			w.Write([]byte("Failed to read body"))
+			log.Printf("ERROR: bad request: %s\n", err)
+			return
 		}
-		message := fmt.Sprintf("Hello, %s!", name)
-		w.Write([]byte(message))
+
+		var event events.Event
+		if err = json.Unmarshal(b, &event); err != nil {
+			sendErrorResponse(w, err.Error(), http.StatusBadRequest)
+			log.Printf("ERROR: bad request: %s\n", err)
+			return
+		}
+
+		sendResultResponse(w, event)
 	}
 }
