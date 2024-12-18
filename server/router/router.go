@@ -11,7 +11,7 @@ type ResultResponse struct {
 }
 
 type ErrorResponse struct {
-	Error string `json:"result"`
+	Error string `json:"error"`
 }
 
 type Middleware func(next http.HandlerFunc) http.HandlerFunc
