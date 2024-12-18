@@ -2,6 +2,7 @@ package router
 
 import (
 	"encoding/json"
+	"io"
 	"net/http"
 )
 
@@ -43,4 +44,16 @@ func getQueryParam(req *http.Request, paramName, defaultValue string) string {
 		return req.URL.Query().Get(paramName)
 	}
 	return defaultValue
+}
+
+func readBody(req *http.Request, obj any) error {
+	b, err := io.ReadAll(req.Body)
+	if err != nil {
+		return err
+	}
+
+	if err = json.Unmarshal(b, obj); err != nil {
+		return err
+	}
+	return nil
 }
