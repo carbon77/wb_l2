@@ -14,16 +14,26 @@ type ErrorResponse struct {
 	Error string `json:"result"`
 }
 
+type Middleware func(next http.HandlerFunc) http.HandlerFunc
+
 var (
 	handlers = map[string]http.HandlerFunc{
 		"/create_event": createEvent,
-		"/get_events":   getEvents,
+		"/events":       getEvents,
+	}
+
+	middlewares = []Middleware{
+		logMiddleware,
 	}
 )
 
 func InitRouter() {
 	for path, handleFunc := range handlers {
-		http.HandleFunc(path, logMiddleware(handleFunc))
+		handler := handleFunc
+		for _, middleware := range middlewares {
+			handler = middleware(handler)
+		}
+		http.HandleFunc(path, handler)
 	}
 }
 
