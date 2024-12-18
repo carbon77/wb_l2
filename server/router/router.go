@@ -19,6 +19,7 @@ type Middleware func(next http.HandlerFunc) http.HandlerFunc
 var (
 	handlers = map[string]http.HandlerFunc{
 		"/create_event": createEvent,
+		"/delete_event": deleteEvent,
 		"/events":       getEvents,
 	}
 
