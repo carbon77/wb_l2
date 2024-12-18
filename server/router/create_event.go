@@ -26,6 +26,7 @@ func createEvent(w http.ResponseWriter, req *http.Request) {
 			return
 		}
 
+		events.Repository().AddEvent(&event)
 		sendResultResponse(w, event)
 	}
 }

@@ -9,6 +9,7 @@ import (
 type UserId uint
 
 type Event struct {
+	Id       string    `json:"event_id"`
 	UserId   UserId    `json:"user_id"`
 	Title    string    `json:"title"`
 	DateTime time.Time `json:"datetime"`
@@ -20,6 +21,7 @@ func (e Event) String() string {
 
 func (e *Event) UnmarshalJSON(data []byte) error {
 	_event := &struct {
+		Id       string `json:"event_id"`
 		UserId   UserId `json:"user_id"`
 		Title    string `json:"title"`
 		DateTime string `json:"datetime"`
@@ -30,6 +32,7 @@ func (e *Event) UnmarshalJSON(data []byte) error {
 		return err
 	}
 
+	e.Id = _event.Id
 	e.UserId = _event.UserId
 	e.Title = _event.Title
 

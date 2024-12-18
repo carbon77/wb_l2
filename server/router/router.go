@@ -16,6 +16,7 @@ type ErrorResponse struct {
 var (
 	handlers = map[string]http.HandlerFunc{
 		"/create_event": createEvent,
+		"/get_events":   getEvents,
 	}
 )
 
@@ -35,4 +36,11 @@ func sendErrorResponse(w http.ResponseWriter, message string, status int) error 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(status)
 	return json.NewEncoder(w).Encode(ErrorResponse{message})
+}
+
+func getQueryParam(req *http.Request, paramName, defaultValue string) string {
+	if req.URL.Query().Has(paramName) {
+		return req.URL.Query().Get(paramName)
+	}
+	return defaultValue
 }
